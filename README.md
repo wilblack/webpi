@@ -1,7 +1,7 @@
 Webpi
 =========================
 
-This code was heavily borrows from https://github.com/hiroakis/tornado-websocket-example.git
+This project is based off of https://github.com/hiroakis/tornado-websocket-example.git.
 
 
 Installation
