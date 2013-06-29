@@ -2,6 +2,9 @@ from tornado import websocket, web, ioloop
 import tornado
 import json
 
+from sensor_threads import DS18B20Thread
+
+
 cl = []
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -45,5 +48,10 @@ app = tornado.web.Application([
 ])
 
 if __name__ == '__main__':
+
+    # Start taking the temperature
+    tsensor = DS18B20Thread(5)
+    tsensor.start()
+    
     app.listen(8888)
     tornado.ioloop.IOLoop.instance().start()

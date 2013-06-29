@@ -5,7 +5,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 </head>
 <body>
-<h1>Raspberry Pi Temperature Station</h1>
+<h1>Webpi - A Raspberry Pi sensor station</h1>
 <hr>
 WebSocket status : <span id="message"></span>
 <hr>
@@ -26,14 +26,7 @@ WebSocket status : <span id="message"></span>
   
   </div>
 </div>
-<hr>
-<h3>REST API examples</h3>
-<ol>
-<li>Set the "id 1" value to 100 : curl "http://hiroakis.com:8888/api?id=1&amp;value=100"</li>
-<li>Set the "id 1" value to 300( The row No 1 will change to yellow ) : curl "http://hiroakis.com:8888/api?id=1&amp;value=300"</li>
-<li>Set The "id 1" value to 600( The row No 1 will change to red ): curl "http://hiroakis.com:8888/api?id=1&amp;value=600"</li>
-cf) value 201 - 500 : change to yellow, value 501 - : change to red
-</ol>
+
 <script>
     var ws = new WebSocket('ws://192.168.1.140:8888/ws');
     ws.onopen = function(){
