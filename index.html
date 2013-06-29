@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>tornado WebSocket example</title>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</head>
+<body>
+<h1>Raspberry Pi Temperature Station</h1>
+<hr>
+WebSocket status : <span id="message"></span>
+<hr>
+<h3>Temperature</h3>
+<div class="container">
+  <div class="row">
+    <div class="span3">
+      <span id="degf"></span> &deg;F
+    </div>
+
+    <div class="span3">
+      <span id="degc"></span> &deg;C
+    </div>
+
+    <div class="span3">
+      <span class="timestamp"></span>
+    </div>
+  
+  </div>
+</div>
+<hr>
+<h3>REST API examples</h3>
+<ol>
+<li>Set the "id 1" value to 100 : curl "http://hiroakis.com:8888/api?id=1&amp;value=100"</li>
+<li>Set the "id 1" value to 300( The row No 1 will change to yellow ) : curl "http://hiroakis.com:8888/api?id=1&amp;value=300"</li>
+<li>Set The "id 1" value to 600( The row No 1 will change to red ): curl "http://hiroakis.com:8888/api?id=1&amp;value=600"</li>
+cf) value 201 - 500 : change to yellow, value 501 - : change to red
+</ol>
+<script>
+    var ws = new WebSocket('ws://192.168.1.140:8888/ws');
+    ws.onopen = function(){
+        $('#message').text('WebSocket open');
+    };
+    ws.onmessage = function(ev){
+        $('#message').text('recieved message');
+
+        var json = JSON.parse(ev.data);
+        $('#' + json.id).text(json.value);
+        $('.timestamp').text(json.timestamp);
+
+        if(json.value > 75){
+            $('#row' + json.id).attr("class", "error");
+        }
+        else if(json.value > 200){
+            $('#row' + json.id).attr("class", "warning");
+        }
+        else{
+            $('#row' + json.id).attr("class", "");
+        }
+    };
+    ws.onclose = function(ev){
+        $('#message').text('WebSocket has closed');
+    };
+    ws.onerror = function(ev){
+        $('#message').text('error occurred');
+    };
+
+</script>
+</body>
+</html>
