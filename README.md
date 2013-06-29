@@ -10,7 +10,9 @@ Installation
 
 2. cd webpi
 
-3. CONFIGURE - Need to make this. 
+3. CONFIGURE 
+  * Configure app.py
+  * Create and Configure init.d/webpi
 
 4. pip install tornado
 
