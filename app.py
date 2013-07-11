@@ -1,3 +1,5 @@
+import os
+
 from tornado import websocket, web, ioloop
 import tornado
 import json
@@ -10,7 +12,7 @@ cl = []
 class IndexHandler(tornado.web.RequestHandler):
 
     def get(self):
-        self.render("index.html")
+        self.render("www/index.html")
 
 class SocketHandler(tornado.websocket.WebSocketHandler):
 
@@ -39,19 +41,27 @@ class ApiHandler(tornado.web.RequestHandler):
     def post(self):
         pass
 
+
+settings = {
+
+    "static_path":os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "www", "static")
+}
 app = tornado.web.Application([
     (r'/', IndexHandler),
     (r'/ws', SocketHandler),
     (r'/api', ApiHandler),
     (r'/(favicon.ico)', tornado.web.StaticFileHandler, {'path': '../'}),
     (r'/(rest_api_example.png)', tornado.web.StaticFileHandler, {'path': './'}),
-])
+    
+], **settings)
 
 if __name__ == '__main__':
 
     # Start taking the temperature
-    tsensor = DS18B20Thread(5)
+    tsensor = DS18B20Thread(5*60)
     tsensor.start()
+    print "Starting app.\nStatic root path: %s" %(settings['static_path'])
     
+
     app.listen(8888)
     tornado.ioloop.IOLoop.instance().start()

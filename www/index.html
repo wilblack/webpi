@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--[if IE 8]> 				 <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+
+<head>
+	<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Foundation 4</title>
+
+  
+  <link rel="stylesheet" href="/static/css/foundation.css" />
+  
+
+  <script src="/static/js/vendor/custom.modernizr.js"></script>
+  <script src="/static/js/vendor/jquery.js"></script>
+
+
+</head>
+<body>
+<nav class="top-bar">
+    <ul class="title-area">
+        <!-- Title Area -->
+        <li class="name">
+          <h1><a href="#">Webpi - A Real-time Sensor Station </a></h1>
+        </li>
+    </ul>
+</nav>
+
+<div class="row">
+    WebSocket status : <span id="message"></span>
+    <h4>Current Temperature</h4>
+    <div class="row">
+      
+        <div class="columns large-4 small-12">
+          <span id="degf"></span> &deg;F
+        </div>
+
+        <div class="columns large-4 small-12">
+          <span id="degc"></span> &deg;C
+        </div>
+
+        <div class="columns large-4 small-12">
+          <span class="timestamp"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <h4>Sampling Period</h4>
+        
+    </div>
+</div>
+<script>
+    var ws = new WebSocket('ws://192.168.1.140:8888/ws');
+    ws.onopen = function(){
+        $('#message').text('WebSocket open');
+    };
+    ws.onmessage = function(ev){
+        $('#message').text('recieved message');
+
+        var json = JSON.parse(ev.data);
+        $('#' + json.id).text(json.value);
+        $('.timestamp').text(json.timestamp);
+
+        if(json.value > 75){
+            $('#row' + json.id).attr("class", "error");
+        }
+        else if(json.value > 200){
+            $('#row' + json.id).attr("class", "warning");
+        }
+        else{
+            $('#row' + json.id).attr("class", "");
+        }
+    };
+    ws.onclose = function(ev){
+        $('#message').text('WebSocket has closed');
+    };
+    ws.onerror = function(ev){
+        $('#message').text('error occurred');
+    };
+
+</script>
+
+<script>
+  document.write('<script src=' +
+  ('__proto__' in {} ? '/static/js/vendor/zepto' : '/static/js/vendor/jquery') +
+  '.js><\/script>')
+</script>
+  
+  <script src="/static/js/foundation.min.js"></script>
+  <!--
+  
+  <script src="js/foundation/foundation.js"></script>
+  
+  <script src="js/foundation/foundation.alerts.js"></script>
+  
+  <script src="js/foundation/foundation.clearing.js"></script>
+  
+  <script src="js/foundation/foundation.cookie.js"></script>
+  
+  <script src="js/foundation/foundation.dropdown.js"></script>
+  
+  <script src="js/foundation/foundation.forms.js"></script>
+  
+  <script src="js/foundation/foundation.joyride.js"></script>
+  
+  <script src="js/foundation/foundation.magellan.js"></script>
+  
+  <script src="js/foundation/foundation.orbit.js"></script>
+  
+  <script src="js/foundation/foundation.reveal.js"></script>
+  
+  <script src="js/foundation/foundation.section.js"></script>
+  
+  <script src="js/foundation/foundation.tooltips.js"></script>
+  
+  <script src="js/foundation/foundation.topbar.js"></script>
+  
+  <script src="js/foundation/foundation.interchange.js"></script>
+  
+  <script src="js/foundation/foundation.placeholder.js"></script>
+  
+  -->
+  
+  <script>
+    $(document).foundation();
+  </script>
+</body>
+</html>
